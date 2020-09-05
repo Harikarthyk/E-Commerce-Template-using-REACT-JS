@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Navbar from './Components/Navbar';
+import Home from './Components/Home';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import UserContext from './context.js/UserContext';
+import WishList from './Components/WishList';
+import Cart from './Components/Cart';
+import About from './Components/About';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [cartItem, setCartItem] = useState([]);
+	const [wishList, setWishList] = useState([]);
+	return (
+		<div className="App">
+			<BrowserRouter>
+				<UserContext.Provider
+					value={{
+						cartItem,
+						setCartItem,
+						wishList,
+						setWishList,
+					}}
+				>
+					<Navbar />
+					<Switch>
+						<Route exact path="/home" component={Home} />
+						<Route path="/wishList" component={WishList} />
+						<Route exact path="/cart" component={Cart} />
+						<Route exact path="/about" component={About} />
+					</Switch>
+				</UserContext.Provider>
+			</BrowserRouter>
+		</div>
+	);
 }
 
 export default App;
