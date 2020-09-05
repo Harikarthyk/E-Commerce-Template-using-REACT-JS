@@ -10,14 +10,12 @@ function Cart() {
 		let cartProuctItem = context.cartItem.map((product) => {
 			return { product: product, count: 1 };
 		});
-		updateTotal();
 		setCartProduct(cartProuctItem);
 		let sum = context.cartItem.reduce(function (acc, val) {
 			return acc + val.price;
 		}, 0);
 		setTotal(sum);
 	}, []);
-	const updateTotal = () => {};
 	const handleCount = (product, operator) => {
 		let cartProductItem = [];
 		cartProductItem = cartProduct.map((currProduct) => {
@@ -33,14 +31,15 @@ function Cart() {
 			return acc + val.count * val.product.price;
 		}, 0);
 		setTotal(sum);
-		console.log(sum);
-		updateTotal();
 	};
 	const removeCartItem = (product) => {
 		let newCartItem = cartProduct.filter(
 			(curr) => curr.product._id !== product._id,
 		);
-
+		let sum = newCartItem.reduce(function (acc, val) {
+			return acc + val.count * val.product.price;
+		}, 0);
+		setTotal(sum);
 		setCartProduct(newCartItem);
 		newCartItem = newCartItem.map((curr) => curr.product);
 		context.setCartItem(newCartItem);
@@ -77,7 +76,9 @@ function Cart() {
 							<div className="cartItem__remove">
 								<button
 									className="cartItem__remove__button"
-									onClick={() => removeCartItem(item.product)}
+									onClick={() => {
+										removeCartItem(item.product);
+									}}
 								>
 									Remove from Cart
 								</button>
